@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+  
+  body {
+    @apply bg-dark-bg text-cream font-baskerville;
+    min-height: 100vh;
+  }
+  
+  h1, h2, h3 {
+    @apply font-playfair;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.05em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gold text-dark-brown px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg;
+    @apply hover:bg-opacity-90 hover:shadow-xl hover:scale-105;
+    @apply active:scale-95;
+    border: 2px solid #d4af37;
+    box-shadow: 0 4px 6px rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-dark-brown border-2 border-gold rounded-lg text-gold;
+    @apply placeholder-gold placeholder-opacity-50;
+    @apply focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent;
+    @apply transition-all duration-300;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+  .input-field:focus {
+    box-shadow: 
+      inset 0 2px 4px rgba(0, 0, 0, 0.3),
+      0 0 0 2px rgba(212, 175, 55, 0.5);
+  }
+  
+  .badge-first10 {
+    @apply inline-flex items-center px-3 py-1 rounded-full bg-gold text-dark-brown text-sm font-bold;
+    animation: pulse-glow 2s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+  }
+  
+  .card-border {
+    @apply border-4 border-gold rounded-lg;
+    box-shadow: 
+      0 8px 16px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(212, 175, 55, 0.2);
+}
+  
+  .deco-divider {
+    @apply border-t-2 border-gold;
+    position: relative;
+    margin: 2rem 0;
+}
+  
+  .deco-divider::before,
+  .deco-divider::after {
+    content: '◆';
+    @apply text-gold absolute top-0;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+}
+
+  .deco-divider::before {
+    left: 20%;
+  }
+  
+  .deco-divider::after {
+    right: 20%;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.9);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out;
+}
