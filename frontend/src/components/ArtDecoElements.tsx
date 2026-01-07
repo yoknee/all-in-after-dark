@@ -41,8 +41,8 @@ export function CTAButton({ children, onClick, className = '' }: { children: Rea
   return (
     <button
       onClick={onClick}
-      className={`flex flex-col w-full bg-gold text-dark-brown-2 px-[72px] py-4 text-base tracking-widest uppercase font-bold border-none cursor-pointer my-6 mx-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] ${className}`}
-      style={{ width: '100%' }}
+      className={`flex flex-col w-fit bg-gold text-dark-brown-2 px-[72px] py-4 text-base tracking-widest uppercase font-bold border-none cursor-pointer my-6 mx-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] ${className}`}
+      style={{ width: 'fit-content' }}
     >
       {children}
     </button>
