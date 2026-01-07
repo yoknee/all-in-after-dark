@@ -60,7 +60,6 @@ Registration Details:
 - Parent Name(s): ${registration.parent_names}
 - Grade Level: ${registration.grade_level}
 - Number of Adults: ${registration.num_adults}
-${registration.dietary_restrictions ? `- Dietary Restrictions: ${registration.dietary_restrictions}` : ''}
 
 Registration Number: #${registration.registration_number} for ${registration.grade_level} Grade
 

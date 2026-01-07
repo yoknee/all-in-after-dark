@@ -54,9 +54,7 @@ export function AdminDashboard() {
       'ID',
       'Parent Names',
       'Email',
-      'Phone',
       'Grade Level',
-      'Dietary Restrictions',
       'Number of Adults',
       'First 10 Status',
       'Registration Number',
@@ -68,9 +66,7 @@ export function AdminDashboard() {
       reg.id,
       reg.parent_names,
       reg.email,
-      reg.phone,
       reg.grade_level,
-      reg.dietary_restrictions || '',
       reg.num_adults.toString(),
       reg.is_first_10 ? 'Yes' : 'No',
       reg.registration_number.toString(),
@@ -222,7 +218,7 @@ export function AdminDashboard() {
                     {reg.parent_names} - {reg.grade_level} Grade
                   </div>
                   <div className="text-gold opacity-70 text-sm">
-                    {reg.email} • {reg.phone} • {new Date(reg.created_at).toLocaleString()}
+                    {reg.email} • {new Date(reg.created_at).toLocaleString()}
                   </div>
                 </div>
                 {reg.is_first_10 && <First10Badge />}

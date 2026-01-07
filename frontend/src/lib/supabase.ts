@@ -13,9 +13,7 @@ export interface Registration {
   id: string
   parent_names: string
   email: string
-  phone: string
   grade_level: string
-  dietary_restrictions: string | null
   num_adults: number
   is_first_10: boolean
   registration_number: number
