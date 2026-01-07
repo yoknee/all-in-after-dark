@@ -66,7 +66,7 @@ export function Home() {
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-[rgba(212,175,55,0.2)] to-[rgba(212,175,55,0.05)] border-2 border-gold p-7.5 my-10 text-center relative">
+          <div className="bg-gradient-to-br from-[rgba(212,175,55,0.2)] to-[rgba(212,175,55,0.05)] border-2 border-gold p-7.5 my-10 text-center relative w-full flex flex-col justify-center items-center px-6">
             <div className="bg-gold text-dark-brown-2 px-5 py-2 text-[11px] tracking-widest uppercase font-bold inline-block mb-4 shadow-[0_4px_15px_rgba(212,175,55,0.4)]">
               ⬥ Exclusive Event ⬥
             </div>
