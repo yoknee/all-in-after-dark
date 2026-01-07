@@ -7,10 +7,10 @@ export function Home() {
   return (
     <div className="min-h-screen bg-dark-bg font-baskerville text-cream">
       {/* Hero Section */}
-      <div className="min-h-screen bg-[rgba(13,8,5,1)] flex justify-center items-center p-0 relative overflow-hidden text-[rgba(13,8,5,1)]">
+      <div className="min-h-screen bg-[rgba(13,8,5,1)] flex justify-center items-center pt-4 pb-4 relative overflow-hidden text-[rgba(13,8,5,1)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)] pointer-events-none"></div>
         
-        <div className="max-w-[600px] w-full border-[3px] border-gold relative p-10 z-10 text-center" style={{ borderStyle: 'solid', borderWidth: '3px', borderColor: 'rgba(212, 175, 55, 1)', boxShadow: 'none', background: 'unset', backgroundImage: 'none', backgroundColor: 'unset' }}>
+        <div className="max-w-[600px] w-full border-[3px] border-gold relative p-10 z-10 text-center" style={{ borderStyle: 'solid', borderWidth: '3px', borderColor: 'rgba(212, 175, 55, 0.75)', borderImage: 'none', boxShadow: 'none', background: 'unset', backgroundImage: 'none', backgroundColor: 'unset' }}>
           {/* Inner border */}
           <div className="absolute top-[15px] left-[15px] right-[15px] bottom-[15px] border border-gold pointer-events-none opacity-50"></div>
           
