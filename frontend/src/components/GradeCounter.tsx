@@ -20,7 +20,7 @@ export function GradeCounter({ selectedGrade }: GradeCounterProps) {
 
   if (!selectedGrade) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-6">
+      <div className="grid grid-cols-3 gap-4 mt-6">
         {gradeCounts.map((gc) => (
           <div
             key={gc.grade}
@@ -30,7 +30,7 @@ export function GradeCounter({ selectedGrade }: GradeCounterProps) {
             <div className="text-sm mt-2">
               {gc.spotsRemaining > 0 ? (
                 <span className="text-cream">
-                  {gc.spotsRemaining} spot{gc.spotsRemaining !== 1 ? 's' : ''} left
+                  {gc.spotsRemaining} left
                 </span>
               ) : (
                 <span className="text-light-gold">Full (10/10)</span>
