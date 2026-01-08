@@ -41,15 +41,15 @@ export function Home() {
           <ArtDecoLine />
           
           <div className="text-center text-cream text-[15px] leading-relaxed my-7.5 px-5">
-            Leave the carpool chaos behind and slip into something more comfortable—like a poker face. We're dealing you into an evening of high stakes, low inhibitions, and zero bedtime negotiations. Think casino tables, craft cocktails, and connections with parents you've been meaning to meet (but were too busy packing lunches to introduce yourself to). 
+            Leave the carpool chaos behind and slip into something more comfortable. We're dealing you into an evening of high stakes, low inhibitions, and zero bedtime negotiations. Think casino tables, craft cocktails, and connections with parents you've been meaning to meet (but were too busy packing lunches to introduce yourself to). Bring your A game.
             <br /><br />
-            <span className="text-gold font-bold">Babysitting included on-site</span>—because the house always wins when the kids are covered.
+            <span className="text-gold font-bold">Babysitting included on-site</span><br />because the house always wins when the kids are covered.
           </div>
           
           <div className="text-center my-10 text-cream text-[15px] leading-[2.2]">
             <div className="my-3">
               <span className="text-gold font-bold tracking-widest uppercase text-[13px]">When</span>
-              <div className="mt-1.5 text-base block">Saturday, [Date TBD] • 7:00 PM - 9:30 PM</div>
+              <div className="mt-1.5 text-base block">Saturday, January 24th, 2026<br />6:30 PM - 9 PM</div>
             </div>
             <div className="my-3">
               <span className="text-gold font-bold tracking-widest uppercase text-[13px]">Where</span>
@@ -95,20 +95,6 @@ export function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 my-12">
             <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
-              <h3 className="font-playfair text-2xl text-gold mb-4">Casino Tables</h3>
-              <p className="text-light-gold leading-relaxed text-sm">
-                Professional dealers running authentic poker, blackjack, roulette, and craps. No real money lost—just dignity and bragging rights.
-              </p>
-            </div>
-            
-            <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
-              <h3 className="font-playfair text-2xl text-gold mb-4">Make New Allies</h3>
-              <p className="text-light-gold leading-relaxed text-sm">
-                Speed introductions, strategic icebreakers, and color-coded mixing designed to connect you with parents beyond your usual circle.
-              </p>
-            </div>
-            
-            <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
               <h3 className="font-playfair text-2xl text-gold mb-4">Havdalah to Happy Hour</h3>
               <p className="text-light-gold leading-relaxed text-sm">
                 We'll begin with an intimate havdalah ceremony featuring live piano, then transition seamlessly into the speakeasy revelry.
@@ -121,6 +107,20 @@ export function Home() {
                 Moody lighting, live jazz, signature cocktails, and vintage vibes. Dress code: optional fedoras, mandatory fun.
               </p>
             </div>
+            
+            <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
+              <h3 className="font-playfair text-2xl text-gold mb-4">Make New Allies</h3>
+              <p className="text-light-gold leading-relaxed text-sm">
+                Speed introductions, strategic icebreakers, and color-coded mixing designed to connect you with parents beyond your usual circle.
+              </p>
+            </div>
+            
+            <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
+              <h3 className="font-playfair text-2xl text-gold mb-4">Casino Tables</h3>
+              <p className="text-light-gold leading-relaxed text-sm">
+                Professional dealers running authentic poker, blackjack, roulette, and craps. No real money lost—just dignity and bragging rights.
+              </p>
+            </div>
           </div>
           
           <div className="mt-15 w-full flex flex-col justify-center items-center gap-2" style={{ boxSizing: 'content-box', display: 'flex', flexDirection: 'column' }}>
@@ -128,7 +128,7 @@ export function Home() {
               Reserve Your Spot
             </CTAButton>
             <div className="text-xs text-light-gold italic mt-2.5">
-              Questions? Contact [event coordinator email]
+              Questions? Your friendly event insider has the answers.
             </div>
           </div>
         </div>

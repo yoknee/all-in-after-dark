@@ -1,5 +1,5 @@
 import { RegistrationForm } from '../components/RegistrationForm'
-import { GradeCounter } from '../components/GradeCounter'
+import { GradeRanking } from '../components/GradeRanking'
 import { ArtDecoTop, CornerOrnament } from '../components/ArtDecoElements'
 
 export function Register() {
@@ -29,11 +29,20 @@ export function Register() {
           </h1>
           
           <div className="font-playfair text-xl md:text-2xl text-light-gold text-center italic my-4 tracking-wide">
-            Spots left by grade level
+            Top grades by signups
           </div>
           
           <div className="my-8">
-            <GradeCounter />
+            <GradeRanking />
+          </div>
+          
+          <div className="bg-[rgba(212,175,55,0.1)] border-2 border-gold rounded p-4 my-6 text-center">
+            <div className="text-gold font-semibold text-sm mb-2 tracking-wider uppercase">
+              Special VIP Treatment
+            </div>
+            <div className="text-cream text-sm leading-relaxed">
+              The first 10 to sign up from each grade will receive special VIP treatment at the speakeasy. Don't miss out on this!
+            </div>
           </div>
           
           <div className="mt-8">
