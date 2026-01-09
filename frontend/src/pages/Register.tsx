@@ -1,5 +1,4 @@
 import { RegistrationForm } from '../components/RegistrationForm'
-import { GradeRanking } from '../components/GradeRanking'
 import { ArtDecoTop, CornerOrnament } from '../components/ArtDecoElements'
 
 export function Register() {
@@ -24,26 +23,9 @@ export function Register() {
             The Night Shift Collective Presents
           </div>
           
-          <h1 className="font-playfair text-4xl md:text-5xl font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight">
+          <h1 className="font-playfair text-[44px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight">
             OFF DUTY PARENTS:<br />ALL IN AFTER DARK
           </h1>
-          
-          <div className="font-playfair text-xl md:text-2xl text-light-gold text-center italic my-4 tracking-wide">
-            Fastest to 10 signups
-          </div>
-          
-          <div className="my-8">
-            <GradeRanking />
-          </div>
-          
-          <div className="bg-[rgba(212,175,55,0.1)] border-2 border-gold rounded p-4 my-6 text-center">
-            <div className="text-gold font-semibold text-sm mb-2 tracking-wider uppercase">
-              Special VIP Treatment
-            </div>
-            <div className="text-cream text-sm leading-relaxed">
-              The first 10 to sign up from each grade will receive special VIP treatment at the speakeasy. Don't miss out on this!
-            </div>
-          </div>
           
           <div className="mt-8">
             <RegistrationForm />

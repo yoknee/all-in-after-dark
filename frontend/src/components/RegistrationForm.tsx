@@ -11,6 +11,8 @@ interface FormData {
   email: string
   grade_level: string
   num_adults: number
+  needs_babysitting: boolean | null
+  kids_info: string
 }
 
 export function RegistrationForm() {
@@ -19,6 +21,8 @@ export function RegistrationForm() {
     email: '',
     grade_level: '',
     num_adults: 1,
+    needs_babysitting: null,
+    kids_info: '',
   })
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -31,11 +35,22 @@ export function RegistrationForm() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: name === 'num_adults' ? parseInt(value) : value,
-    }))
+    const { name, value, type } = e.target
+    const checked = (e.target as HTMLInputElement).checked
+    
+    setFormData((prev) => {
+      if (type === 'radio' && name === 'needs_babysitting') {
+        return {
+          ...prev,
+          needs_babysitting: value === 'true',
+          kids_info: value === 'false' ? '' : prev.kids_info, // Clear kids_info if "No" is selected
+        }
+      }
+      return {
+        ...prev,
+        [name]: name === 'num_adults' ? parseInt(value) : value,
+      }
+    })
     // Clear error when user starts typing
     if (errors[name as keyof FormData]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }))
@@ -57,6 +72,14 @@ export function RegistrationForm() {
 
     if (!formData.grade_level) {
       newErrors.grade_level = 'Please select a grade level'
+    }
+
+    if (formData.needs_babysitting === null) {
+      newErrors.needs_babysitting = 'Please indicate if you need babysitting'
+    }
+
+    if (formData.needs_babysitting === true && !formData.kids_info.trim()) {
+      newErrors.kids_info = 'Please provide kids\' names and ages'
     }
 
     setErrors(newErrors)
@@ -94,6 +117,8 @@ export function RegistrationForm() {
           email: formData.email.trim().toLowerCase(),
           grade_level: formData.grade_level,
           num_adults: formData.num_adults,
+          needs_babysitting: formData.needs_babysitting,
+          kids_info: formData.needs_babysitting ? formData.kids_info.trim() : null,
           is_first_10: willBeFirst10,
           registration_number: registrationNumber,
           confirmation_sent: false,
@@ -125,6 +150,8 @@ export function RegistrationForm() {
         email: '',
         grade_level: '',
         num_adults: 1,
+        needs_babysitting: null,
+        kids_info: '',
       })
     } catch (error) {
       console.error('Registration error:', error)
@@ -242,11 +269,64 @@ export function RegistrationForm() {
           </div>
         </div>
 
+        <div>
+          <label className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
+            Need Babysitting? *
+          </label>
+          <div className="flex gap-4">
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="needs_babysitting"
+                value="true"
+                checked={formData.needs_babysitting === true}
+                onChange={handleChange}
+                className="mr-2 w-5 h-5 text-gold focus:ring-gold accent-gold"
+              />
+              <span className="text-cream">Yes</span>
+            </label>
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="needs_babysitting"
+                value="false"
+                checked={formData.needs_babysitting === false}
+                onChange={handleChange}
+                className="mr-2 w-5 h-5 text-gold focus:ring-gold accent-gold"
+              />
+              <span className="text-cream">No</span>
+            </label>
+          </div>
+          {errors.needs_babysitting && (
+            <p className="text-red-400 text-sm mt-1">{errors.needs_babysitting}</p>
+          )}
+        </div>
+
+        {formData.needs_babysitting === true && (
+          <div>
+            <label htmlFor="kids_info" className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
+              Kids' Names and Ages *
+            </label>
+            <textarea
+              id="kids_info"
+              name="kids_info"
+              value={formData.kids_info}
+              onChange={handleChange}
+              rows={4}
+              className={`w-full px-4 py-3 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville resize-y ${errors.kids_info ? 'border-red-500' : ''}`}
+              placeholder="Please list each child's name and age (e.g., Sarah, age 7; Jacob, age 5)"
+            />
+            {errors.kids_info && (
+              <p className="text-red-400 text-sm mt-1">{errors.kids_info}</p>
+            )}
+          </div>
+        )}
+
         <button
           type="submit"
           disabled={isSubmitting}
           className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-gold"
-          style={{ maxWidth: '464px', height: '56px' }}
+          style={{ height: '56px' }}
         >
           {isSubmitting ? 'Submitting...' : 'submit'}
         </button>
