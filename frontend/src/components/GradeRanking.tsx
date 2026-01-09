@@ -1,7 +1,7 @@
-import { useFastestTo10 } from '../hooks/useFastestTo10'
+import { usePodiumRankings } from '../hooks/usePodiumRankings'
 
 export function GradeRanking() {
-  const { rankings, loading } = useFastestTo10()
+  const { podiumRankings, loading } = usePodiumRankings()
 
   if (loading) {
     return (
@@ -11,20 +11,19 @@ export function GradeRanking() {
     )
   }
 
-  if (rankings.length === 0) {
+  // Check if we have any rankings
+  const hasRankings = podiumRankings.some((p) => p.grade !== null)
+
+  if (!hasRankings) {
     return (
       <div className="text-gold opacity-70 text-center py-8">
-        No grades have reached 10 signups yet. Be the first!
+        No registrations yet. Be the first!
       </div>
     )
   }
 
-  // Map rankings to podium positions: 1st center, 2nd left, 3rd right
-  const podiumData = [
-    rankings[1] || null, // 2nd place (left)
-    rankings[0] || null,  // 1st place (center)
-    rankings[2] || null, // 3rd place (right)
-  ]
+  // Podium array: [2nd (left), 1st (center), 3rd (right)]
+  const podiumData = podiumRankings
 
   const podiumColors = [
     { // Silver for 2nd
@@ -49,6 +48,9 @@ export function GradeRanking() {
 
   const podiumHeights = ['h-32', 'h-40', 'h-28'] // 2nd, 1st, 3rd
   const rankLabels = ['2nd', '1st', '3rd']
+
+  // Find 1st place podium index (center position)
+  const firstPlaceIndex = podiumData.findIndex((p) => p.position === 1 && p.grade !== null)
 
   return (
     <div className="relative w-full py-8" style={{ background: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%)' }}>
@@ -75,73 +77,95 @@ export function GradeRanking() {
         </div>
       </div>
 
-      {/* Trophy and Laurel Wreath */}
-      <div className="relative flex justify-center items-center mb-8" style={{ height: '120px' }}>
-        {/* Laurel Wreath */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <svg width="200" height="100" viewBox="0 0 200 100" className="text-gold opacity-60">
-            <path
-              d="M 20 50 Q 30 20, 50 30 Q 70 40, 100 35 Q 130 40, 150 30 Q 170 20, 180 50 Q 170 80, 150 70 Q 130 60, 100 65 Q 70 60, 50 70 Q 30 80, 20 50 Z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <circle cx="60" cy="40" r="3" fill="currentColor" />
-            <circle cx="80" cy="35" r="3" fill="currentColor" />
-            <circle cx="100" cy="32" r="3" fill="currentColor" />
-            <circle cx="120" cy="35" r="3" fill="currentColor" />
-            <circle cx="140" cy="40" r="3" fill="currentColor" />
-            <circle cx="60" cy="60" r="3" fill="currentColor" />
-            <circle cx="80" cy="65" r="3" fill="currentColor" />
-            <circle cx="100" cy="68" r="3" fill="currentColor" />
-            <circle cx="120" cy="65" r="3" fill="currentColor" />
-            <circle cx="140" cy="60" r="3" fill="currentColor" />
-          </svg>
-        </div>
-
-        {/* Trophy */}
-        <div className="relative z-10">
-          <svg width="60" height="80" viewBox="0 0 60 80" className="text-gold">
-            {/* Trophy base */}
-            <rect x="15" y="70" width="30" height="8" fill="#2d1810" rx="2" />
-            {/* Trophy cup */}
-            <path
-              d="M 20 20 L 20 65 L 25 70 L 35 70 L 40 65 L 40 20 Q 40 15, 35 15 L 25 15 Q 20 15, 20 20 Z"
-              fill="url(#trophyGradient)"
-              stroke="#b8860b"
-              strokeWidth="1.5"
-            />
-            {/* Trophy handles */}
-            <path
-              d="M 20 30 Q 10 30, 10 40 Q 10 50, 20 50"
-              fill="none"
-              stroke="url(#trophyGradient)"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <path
-              d="M 40 30 Q 50 30, 50 40 Q 50 50, 40 50"
-              fill="none"
-              stroke="url(#trophyGradient)"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-            <defs>
-              <linearGradient id="trophyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#d4af37" stopOpacity="1" />
-                <stop offset="50%" stopColor="#b8860b" stopOpacity="1" />
-                <stop offset="100%" stopColor="#9a7209" stopOpacity="1" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </div>
-
       {/* Podium Structure */}
-      <div className="flex items-end justify-center gap-4 max-w-4xl mx-auto px-4">
+      <div className="relative flex items-end justify-center gap-4 max-w-4xl mx-auto px-4">
+        {/* Trophy and Laurel Wreath - positioned above 1st place (center podium at index 1) */}
+        {firstPlaceIndex !== -1 && (
+          <div 
+            className="absolute flex justify-center items-center"
+            style={{
+              bottom: '100%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              marginBottom: '20px',
+              height: '120px',
+              width: '200px',
+              pointerEvents: 'none',
+              zIndex: 10
+            }}
+          >
+            {/* Laurel Wreath */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <svg width="200" height="100" viewBox="0 0 200 100" className="text-gold opacity-60">
+                <path
+                  d="M 20 50 Q 30 20, 50 30 Q 70 40, 100 35 Q 130 40, 150 30 Q 170 20, 180 50 Q 170 80, 150 70 Q 130 60, 100 65 Q 70 60, 50 70 Q 30 80, 20 50 Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+                <circle cx="60" cy="40" r="3" fill="currentColor" />
+                <circle cx="80" cy="35" r="3" fill="currentColor" />
+                <circle cx="100" cy="32" r="3" fill="currentColor" />
+                <circle cx="120" cy="35" r="3" fill="currentColor" />
+                <circle cx="140" cy="40" r="3" fill="currentColor" />
+                <circle cx="60" cy="60" r="3" fill="currentColor" />
+                <circle cx="80" cy="65" r="3" fill="currentColor" />
+                <circle cx="100" cy="68" r="3" fill="currentColor" />
+                <circle cx="120" cy="65" r="3" fill="currentColor" />
+                <circle cx="140" cy="60" r="3" fill="currentColor" />
+              </svg>
+            </div>
+
+            {/* Trophy */}
+            <div className="relative z-10">
+              <svg width="60" height="80" viewBox="0 0 60 80" className="text-gold">
+                {/* Trophy base */}
+                <rect x="15" y="70" width="30" height="8" fill="#2d1810" rx="2" />
+                {/* Trophy cup */}
+                <path
+                  d="M 20 20 L 20 65 L 25 70 L 35 70 L 40 65 L 40 20 Q 40 15, 35 15 L 25 15 Q 20 15, 20 20 Z"
+                  fill="url(#trophyGradient)"
+                  stroke="#b8860b"
+                  strokeWidth="1.5"
+                />
+                {/* Trophy handles */}
+                <path
+                  d="M 20 30 Q 10 30, 10 40 Q 10 50, 20 50"
+                  fill="none"
+                  stroke="url(#trophyGradient)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 40 30 Q 50 30, 50 40 Q 50 50, 40 50"
+                  fill="none"
+                  stroke="url(#trophyGradient)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                />
+                <defs>
+                  <linearGradient id="trophyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#d4af37" stopOpacity="1" />
+                    <stop offset="50%" stopColor="#b8860b" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#9a7209" stopOpacity="1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+        )}
+
         {podiumData.map((ranking, index) => {
-          if (!ranking) return <div key={`empty-${index}`} className="flex-1"></div>
+          if (!ranking.grade) {
+            return (
+              <div 
+                key={`empty-${index}`} 
+                className="flex-1"
+                style={{ maxWidth: index === 1 ? '280px' : '240px' }}
+              ></div>
+            )
+          }
           
           const colors = podiumColors[index]
           const height = podiumHeights[index]
@@ -149,8 +173,8 @@ export function GradeRanking() {
 
           return (
             <div
-              key={ranking.grade}
-              className={`flex-1 flex flex-col ${height} relative`}
+              key={`${ranking.grade.gradeId}-${ranking.position}`}
+              className={`flex-1 flex flex-col ${height} relative podium-panel ${ranking.isLocked ? 'locked' : ''}`}
               style={{ maxWidth: index === 1 ? '280px' : '240px' }}
             >
               {/* Podium Panel */}
@@ -159,11 +183,18 @@ export function GradeRanking() {
                 style={{
                   background: colors.main,
                   border: `3px solid ${colors.border}`,
-                  boxShadow: `
-                    0 8px 20px rgba(0, 0, 0, 0.4),
-                    inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                    inset 0 -2px 4px rgba(0, 0, 0, 0.3)
-                  `
+                  boxShadow: ranking.isLocked
+                    ? `
+                        0 8px 20px rgba(0, 0, 0, 0.4),
+                        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(212, 175, 55, 0.5)
+                      `
+                    : `
+                        0 8px 20px rgba(0, 0, 0, 0.4),
+                        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+                        inset 0 -2px 4px rgba(0, 0, 0, 0.3)
+                      `
                 }}
               >
                 {/* Art Deco Top Border */}
@@ -175,7 +206,7 @@ export function GradeRanking() {
                     borderTop: `2px solid ${colors.border}`
                   }}
                 >
-                  {/* Art Deco corner decorations - more prominent */}
+                  {/* Art Deco corner decorations */}
                   <div 
                     className="absolute left-0 top-0 w-6 h-6 border-l-3 border-t-3" 
                     style={{ borderColor: colors.border, borderWidth: '3px' }}
@@ -190,8 +221,21 @@ export function GradeRanking() {
                     className="text-xl md:text-2xl font-bold uppercase tracking-wider font-playfair px-4 text-center"
                     style={{ color: colors.text, textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)' }}
                   >
-                    {ranking.grade} GRADE
+                    {ranking.grade.gradeLabel.toUpperCase()}
                   </div>
+
+                  {/* Locked Badge */}
+                  {ranking.isLocked && (
+                    <div
+                      className="absolute top-1 right-1 bg-gold text-dark-brown-2 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider"
+                      style={{
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+                        animation: 'pulse-glow 2s ease-in-out infinite'
+                      }}
+                    >
+                      LOCKED
+                    </div>
+                  )}
                 </div>
 
                 {/* Rank Number */}
@@ -203,6 +247,13 @@ export function GradeRanking() {
                     {rankLabel}
                   </div>
                 </div>
+
+                {/* Signup Count (optional, for debugging/display) */}
+                {!ranking.isLocked && (
+                  <div className="absolute bottom-2 right-2 text-xs opacity-70" style={{ color: colors.darkText }}>
+                    {ranking.grade.signupCount} signups
+                  </div>
+                )}
               </div>
             </div>
           )
