@@ -29,7 +29,7 @@ export function Register() {
           </h1>
           
           <div className="font-playfair text-xl md:text-2xl text-light-gold text-center italic my-4 tracking-wide">
-            Top grades by signups
+            Fastest to 10 signups
           </div>
           
           <div className="my-8">
