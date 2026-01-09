@@ -36,7 +36,6 @@ export function RegistrationForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target
-    const checked = (e.target as HTMLInputElement).checked
     
     setFormData((prev) => {
       if (type === 'radio' && name === 'needs_babysitting') {
