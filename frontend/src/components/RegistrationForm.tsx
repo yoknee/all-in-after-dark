@@ -5,6 +5,31 @@ import { supabase } from '../lib/supabase'
 
 const GRADES = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
 
+// Speakeasy-themed words for password generation
+const SHORT_WORDS = [
+  'clandestine', 'hush-hush', 'dimlit', 'smoky', 'hideaway', 'underground', 'backroom', 'insiders', 'after-hours', 'linger',
+  'velvet', 'shadows', 'bootlegger', 'sharp', 'dresser', 'nod', 'barkeep', 'pours', 'stiff', 'drink',
+  'rye', 'gin', 'toast', 'smooth-talker', 'in-the-know', 'jazz', 'grooves', 'swing', 'midnight-hour', 'brass',
+  'rhythm', 'mingle', 'flirt', 'rounds', 'tailored', 'finery', 'debonair', 'passwords', 'whispered', 'signals',
+  'exchanged', 'discreet', 'forbidden', 'off-the-record', 'members-only', 'no-questions-asked', 'bee\'s-knees', 'nightcap', 'real-McCoy', 'alcove',
+  'candlelight', 'low-lit', 'shadowplay', 'velvet-roped', 'tucked-away', 'covert', 'sly', 'knowing', 'murmured', 'illicitly',
+  'back-alley', 'side-door', 'passworded', 'guarded', 'hushed', 'smoky-glass', 'brass-lined', 'oak-bar', 'leather-bound', 'cut-glass',
+  'crystal', 'coupe', 'tumbler', 'bitters', 'garnish', 'twist', 'muddled', 'shaken', 'stirred', 'slow-sip',
+  'linger-longer', 'after-dark', 'moonlit', 'midnight-oil', 'late-night', 'dim-corner', 'soft-glow', 'low-murmur', 'clink', 'pour-heavy',
+  'neat', 'straight-up', 'speckled-light', 'smoke-ring', 'backstairs', 'hushword', 'soft-step', 'slipstream', 'ink-black', 'low-profile',
+  'undercurrent', 'cloakroom', 'coat-check', 'pocket-watch', 'silk-tie', 'cufflink', 'pressed-lapel', 'brass-knob', 'hidden-latch', 'knock-twice',
+  'sly-grin', 'side-glance', 'quiet-toast', 'late-set', 'slow-jam', 'hush-note', 'backbooth', 'low-proof', 'highball', 'coupe-glass'
+]
+
+const generatePassword = (): string => {
+  const words: string[] = []
+  for (let i = 0; i < 3; i++) {
+    const randomIndex = Math.floor(Math.random() * SHORT_WORDS.length)
+    words.push(SHORT_WORDS[randomIndex])
+  }
+  return words.join(' ')
+}
+
 interface FormData {
   parent_names: string
   email: string
@@ -27,6 +52,7 @@ export function RegistrationForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [secretPassword, setSecretPassword] = useState<string>('')
 
   const handleCloseTab = () => {
     window.close()
@@ -138,6 +164,8 @@ export function RegistrationForm() {
 
       if (error) throw error
 
+      // Generate random password
+      setSecretPassword(generatePassword())
       setSubmitSuccess(true)
 
       // Trigger email confirmation via Edge Function
@@ -174,6 +202,20 @@ export function RegistrationForm() {
     return (
       <div className="text-center">
         <h2 className="font-playfair text-3xl font-bold text-gold mb-4">Registration Successful!</h2>
+        
+        {/* Secret Password Section */}
+        <div className="bg-gradient-to-br from-[rgba(212,175,55,0.2)] to-[rgba(212,175,55,0.05)] border-2 border-gold rounded-lg p-6 my-6">
+          <div className="text-gold text-xs tracking-widest uppercase mb-2 font-semibold">
+            PASSWORD REQUIRED FOR ENTRY
+          </div>
+          <div className="font-playfair text-2xl md:text-3xl font-bold text-gold tracking-wider">
+            {secretPassword}
+          </div>
+          <div className="text-light-gold text-sm italic mt-2">
+            Keep this safe - you'll need it at the door
+          </div>
+        </div>
+
         <button
           onClick={handleCloseTab}
           className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)]"
