@@ -49,7 +49,6 @@ export function GradeRanking() {
 
   const podiumHeights = ['h-32', 'h-40', 'h-28'] // 2nd, 1st, 3rd
   const rankLabels = ['2nd', '1st', '3rd']
-  const rankNumbers = [2, 1, 3]
 
   return (
     <div className="relative w-full py-8" style={{ background: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%)' }}>
@@ -147,7 +146,6 @@ export function GradeRanking() {
           const colors = podiumColors[index]
           const height = podiumHeights[index]
           const rankLabel = rankLabels[index]
-          const rankNum = rankNumbers[index]
 
           return (
             <div
