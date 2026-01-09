@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { supabase } from '../lib/supabase'
-import { GradeCounter } from './GradeCounter'
 import { First10Badge } from './First10Badge'
 
 const GRADES = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
@@ -12,7 +11,7 @@ interface FormData {
   grade_level: string
   num_adults: number
   needs_babysitting: boolean | null
-  kids_info: string
+  babysitting_notes: string
 }
 
 export function RegistrationForm() {
@@ -22,7 +21,7 @@ export function RegistrationForm() {
     grade_level: '',
     num_adults: 1,
     needs_babysitting: null,
-    kids_info: '',
+    babysitting_notes: '',
   })
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -36,13 +35,13 @@ export function RegistrationForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target
-    
+
     setFormData((prev) => {
       if (type === 'radio' && name === 'needs_babysitting') {
         return {
           ...prev,
           needs_babysitting: value === 'true',
-          kids_info: value === 'false' ? '' : prev.kids_info, // Clear kids_info if "No" is selected
+          babysitting_notes: value === 'false' ? '' : prev.babysitting_notes, // Clear babysitting_notes if "No" is selected
         }
       }
       return {
@@ -77,8 +76,8 @@ export function RegistrationForm() {
       newErrors.needs_babysitting = 'Please indicate if you need babysitting'
     }
 
-    if (formData.needs_babysitting === true && !formData.kids_info.trim()) {
-      newErrors.kids_info = 'Please provide kids\' names and ages'
+    if (formData.needs_babysitting === true && !formData.babysitting_notes.trim()) {
+      newErrors.babysitting_notes = 'Please provide kids\' names and ages'
     }
 
     setErrors(newErrors)
@@ -117,7 +116,7 @@ export function RegistrationForm() {
           grade_level: formData.grade_level,
           num_adults: formData.num_adults,
           needs_babysitting: formData.needs_babysitting,
-          kids_info: formData.needs_babysitting ? formData.kids_info.trim() : null,
+          babysitting_notes: formData.needs_babysitting ? formData.babysitting_notes.trim() : null,
           is_first_10: willBeFirst10,
           registration_number: registrationNumber,
           confirmation_sent: false,
@@ -150,7 +149,7 @@ export function RegistrationForm() {
         grade_level: '',
         num_adults: 1,
         needs_babysitting: null,
-        kids_info: '',
+        babysitting_notes: '',
       })
     } catch (error) {
       console.error('Registration error:', error)
@@ -235,7 +234,6 @@ export function RegistrationForm() {
           {errors.grade_level && (
             <p className="text-red-400 text-sm mt-1">{errors.grade_level}</p>
           )}
-          {formData.grade_level && <GradeCounter selectedGrade={formData.grade_level} />}
         </div>
 
         <div>
@@ -303,20 +301,20 @@ export function RegistrationForm() {
 
         {formData.needs_babysitting === true && (
           <div>
-            <label htmlFor="kids_info" className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
+            <label htmlFor="babysitting_notes" className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
               Kids' Names and Ages *
             </label>
             <textarea
-              id="kids_info"
-              name="kids_info"
-              value={formData.kids_info}
+              id="babysitting_notes"
+              name="babysitting_notes"
+              value={formData.babysitting_notes}
               onChange={handleChange}
               rows={4}
-              className={`w-full px-4 py-3 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville resize-y ${errors.kids_info ? 'border-red-500' : ''}`}
+              className={`w-full px-4 py-3 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville resize-y ${errors.babysitting_notes ? 'border-red-500' : ''}`}
               placeholder="Please list each child's name and age (e.g., Sarah, age 7; Jacob, age 5)"
             />
-            {errors.kids_info && (
-              <p className="text-red-400 text-sm mt-1">{errors.kids_info}</p>
+            {errors.babysitting_notes && (
+              <p className="text-red-400 text-sm mt-1">{errors.babysitting_notes}</p>
             )}
           </div>
         )}

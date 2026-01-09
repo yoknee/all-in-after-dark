@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { ArtDecoTop, CornerOrnament, CTAButton, ArtDecoLine } from '../components/ArtDecoElements'
-import { GradeRanking } from '../components/GradeRanking'
 import { VIPTreatmentBox } from '../components/VIPTreatmentBox'
 
 export function Home() {
@@ -64,6 +63,10 @@ export function Home() {
             <div className="text-sm text-light-gold italic">Senesh students only</div>
           </div>
           
+          <div className="mt-8 mb-4">
+            <VIPTreatmentBox />
+          </div>
+
           <div className="text-center my-10 text-cream text-[15px] leading-[2.2]">
             <div className="my-3">
               <span className="text-gold font-bold tracking-widest uppercase text-[13px]">When</span>
@@ -118,23 +121,9 @@ export function Home() {
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-[rgba(212,175,55,0.2)] to-[rgba(212,175,55,0.05)] border-2 border-gold p-7.5 my-10 text-center relative w-full flex flex-col justify-center items-center px-6 max-w-[800px] mx-auto">
-            <div className="bg-gold text-dark-brown-2 px-5 py-2 text-[11px] tracking-widest uppercase font-bold inline-block mb-4 shadow-[0_4px_15px_rgba(212,175,55,0.4)]">
-              ⬥ Exclusive Event ⬥
-            </div>
-            
-            <div className="w-full mb-2">
-              <GradeRanking />
-            </div>
-            
-            <div className="w-full -mt-4">
-              <VIPTreatmentBox />
-            </div>
-            
-            <CTAButton onClick={() => navigate('/register')} className="my-7.5">
-              Reserve Your Spot
-            </CTAButton>
-          </div>
+          <CTAButton onClick={() => navigate('/register')} className="my-7.5">
+            Reserve Your Spot
+          </CTAButton>
           
           <div className="mt-15 w-full flex flex-col justify-center items-center gap-2" style={{ boxSizing: 'content-box', display: 'flex', flexDirection: 'column' }}>
             <div className="text-xs text-light-gold italic mt-2.5">

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Registration } from '../lib/supabase'
-import { useGradeCounts } from '../hooks/useGradeCounts'
 import { First10Badge } from './First10Badge'
+import { PodiumRanking } from './PodiumRanking'
 
 export function AdminDashboard() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
-  const { gradeCounts } = useGradeCounts()
 
   useEffect(() => {
     fetchRegistrations()
@@ -60,6 +59,8 @@ export function AdminDashboard() {
       'Registration Number',
       'Registration Date',
       'Confirmation Sent',
+      'Needs Babysitting',
+      'Babysitting Notes',
     ]
 
     const rows = registrations.map((reg) => [
@@ -72,6 +73,8 @@ export function AdminDashboard() {
       reg.registration_number.toString(),
       new Date(reg.created_at).toLocaleString(),
       reg.confirmation_sent ? 'Yes' : 'No',
+      reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A',
+      reg.babysitting_notes || '',
     ])
 
     const csvContent = [
@@ -91,23 +94,6 @@ export function AdminDashboard() {
   }
 
   const totalRegistrations = registrations.length
-  const first10Count = registrations.filter((r) => r.is_first_10).length
-
-  const breakdownByGrade = gradeCounts.map((gc) => ({
-    grade: gc.grade,
-    total: gc.count,
-    first10: registrations.filter((r) => r.grade_level === gc.grade && r.is_first_10).length,
-  }))
-
-  const first10ByGrade: Record<string, Registration[]> = {}
-  registrations
-    .filter((r) => r.is_first_10)
-    .forEach((reg) => {
-      if (!first10ByGrade[reg.grade_level]) {
-        first10ByGrade[reg.grade_level] = []
-      }
-      first10ByGrade[reg.grade_level].push(reg)
-    })
 
   if (loading) {
     return (
@@ -125,14 +111,10 @@ export function AdminDashboard() {
         </h1>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 text-center card-border hover:shadow-xl transition-all duration-300">
             <div className="text-3xl font-bold text-gold">{totalRegistrations}</div>
             <div className="text-gold mt-2">Total Registrations</div>
-          </div>
-          <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 text-center card-border hover:shadow-xl transition-all duration-300">
-            <div className="text-3xl font-bold text-gold">{first10Count}</div>
-            <div className="text-gold mt-2">First 10 Registrations</div>
           </div>
           <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 text-center card-border">
             <button onClick={exportToCSV} className="btn-primary w-full">
@@ -141,27 +123,36 @@ export function AdminDashboard() {
           </div>
         </div>
 
-        {/* Breakdown by Grade */}
+        {/* Podium Ranking */}
         <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 mb-8 card-border">
-          <h2 className="text-2xl font-bold text-gold mb-4">Breakdown by Grade</h2>
+          <PodiumRanking />
+        </div>
+
+        {/* All Registrations */}
+        <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 mb-8 card-border">
+          <h2 className="text-2xl font-bold text-gold mb-4">All Registrations</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-gold">
-                  <th className="text-gold font-semibold py-2">Grade</th>
-                  <th className="text-gold font-semibold py-2">Total</th>
-                  <th className="text-gold font-semibold py-2">First 10</th>
-                  <th className="text-gold font-semibold py-2">Spots Remaining</th>
+                  <th className="text-gold font-semibold py-2 px-2">Parent Names</th>
+                  <th className="text-gold font-semibold py-2 px-2">Email</th>
+                  <th className="text-gold font-semibold py-2 px-2">Grade Level</th>
+                  <th className="text-gold font-semibold py-2 px-2">Needs Babysitting</th>
+                  <th className="text-gold font-semibold py-2 px-2">Babysitting Notes</th>
                 </tr>
               </thead>
               <tbody>
-                {breakdownByGrade.map((item) => (
-                  <tr key={item.grade} className="border-b border-gold border-opacity-30">
-                    <td className="text-gold py-2">{item.grade}</td>
-                    <td className="text-gold py-2">{item.total}</td>
-                    <td className="text-gold py-2">{item.first10}</td>
-                    <td className="text-gold py-2">
-                      {Math.max(0, 10 - item.total)} / 10
+                {registrations.map((reg) => (
+                  <tr key={reg.id} className="border-b border-gold border-opacity-30">
+                    <td className="text-gold py-2 px-2">{reg.parent_names}</td>
+                    <td className="text-gold py-2 px-2">{reg.email}</td>
+                    <td className="text-gold py-2 px-2">{reg.grade_level}</td>
+                    <td className="text-gold py-2 px-2">
+                      {reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A'}
+                    </td>
+                    <td className="text-gold py-2 px-2">
+                      {reg.needs_babysitting === true && reg.babysitting_notes ? reg.babysitting_notes : '-'}
                     </td>
                   </tr>
                 ))}
@@ -170,45 +161,11 @@ export function AdminDashboard() {
           </div>
         </div>
 
-        {/* First 10 by Grade */}
-        <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 mb-8 card-border">
-          <h2 className="text-2xl font-bold text-gold mb-4">First 10 Registrations by Grade</h2>
-          {Object.keys(first10ByGrade).length === 0 ? (
-            <p className="text-gold opacity-70">No first 10 registrations yet.</p>
-          ) : (
-            Object.entries(first10ByGrade).map(([grade, regs]) => (
-              <div key={grade} className="mb-6">
-                <h3 className="text-xl font-semibold text-gold mb-2">
-                  {grade} Grade ({regs.length} registrations)
-                </h3>
-                <div className="space-y-2">
-                  {regs
-                    .sort((a, b) => a.registration_number - b.registration_number)
-                    .map((reg) => (
-                      <div
-                        key={reg.id}
-                        className="bg-dark-brown border border-gold rounded p-3 flex items-center justify-between"
-                      >
-                        <div>
-                          <span className="text-gold font-semibold">
-                            #{reg.registration_number} - {reg.parent_names}
-                          </span>
-                          <span className="text-gold opacity-70 ml-2">({reg.email})</span>
-                        </div>
-                        <First10Badge />
-                      </div>
-                    ))}
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
         {/* Recent Registrations Feed */}
         <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 card-border">
           <h2 className="text-2xl font-bold text-gold mb-4">Recent Registrations</h2>
           <div className="space-y-3 max-h-96 overflow-y-auto">
-            {registrations.slice(0, 20).map((reg) => (
+            {registrations.slice(0, 10).map((reg) => (
               <div
                 key={reg.id}
                 className="bg-dark-brown border border-gold rounded p-4 flex items-center justify-between"

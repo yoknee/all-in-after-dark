@@ -19,5 +19,7 @@ export interface Registration {
   registration_number: number
   created_at: string
   confirmation_sent: boolean
+  needs_babysitting: boolean | null
+  babysitting_notes: string | null
 }
 
