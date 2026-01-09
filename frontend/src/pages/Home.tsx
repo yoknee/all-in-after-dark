@@ -93,37 +93,39 @@ export function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 my-12">
             <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
-              <h3 className="font-playfair text-2xl text-gold mb-4">Havdalah to Nip Joint</h3>
+              <h3 className="font-playfair text-2xl text-gold mb-4">Havdalah to Night Cap</h3>
               <p className="text-light-gold leading-relaxed text-sm">
-                We'll begin with an intimate havdalah ceremony, then transition seamlessly into the speakeasy revelry.
+                Begin with an intimate havdalah ceremony, then transition into the speakeasy revelry.
               </p>
             </div>
             
             <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
               <h3 className="font-playfair text-2xl text-gold mb-4">1920s Atmosphere</h3>
               <p className="text-light-gold leading-relaxed text-sm">
-                Moody lighting, live jazz, signature cocktails, and vintage vibes. Dress code: optional fedoras, mandatory fun.
+                Moody lighting, live jazz, and vintage vibes. Dress code: optional fedoras, mandatory fun.
               </p>
             </div>
             
             <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
               <h3 className="font-playfair text-2xl text-gold mb-4">Games & New Friends</h3>
               <p className="text-light-gold leading-relaxed text-sm">
-                Fun games + mixers to mingle parents across grades and circles - playful prompts, good vibes, and new friends by night's end.
+                Fun games + mixers to mingle parents across grades and circles - new friends by night's end.
               </p>
             </div>
             
             <div className="p-5 border border-gold/30 bg-[rgba(212,175,55,0.05)]">
               <h3 className="font-playfair text-2xl text-gold mb-4">Bites, Suds & Spirits</h3>
               <p className="text-light-gold leading-relaxed text-sm">
-                Finger foods, specialty cocktails, and small bites to keep the energy flowing throughout the evening.
+                Strong pours, smart bites, and just enough indulgence to keep the night lively.
               </p>
             </div>
           </div>
           
-          <CTAButton onClick={() => navigate('/register')} className="my-7.5">
-            Reserve Your Spot
-          </CTAButton>
+          <div className="flex justify-center items-center my-7.5">
+            <CTAButton onClick={() => navigate('/register')} className="max-w-[464px]">
+              Reserve Your Spot
+            </CTAButton>
+          </div>
           
           <div className="mt-15 w-full flex flex-col justify-center items-center gap-2" style={{ boxSizing: 'content-box', display: 'flex', flexDirection: 'column' }}>
             <div className="text-xs text-light-gold italic mt-2.5">
