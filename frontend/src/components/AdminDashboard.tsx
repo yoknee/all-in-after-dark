@@ -7,6 +7,7 @@ import { PodiumRanking } from './PodiumRanking'
 export function AdminDashboard() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     fetchRegistrations()
@@ -95,6 +96,18 @@ export function AdminDashboard() {
 
   const totalRegistrations = registrations.length
 
+  // Filter registrations based on search query
+  const filteredRegistrations = registrations.filter((reg) => {
+    if (!searchQuery.trim()) return true
+    const query = searchQuery.toLowerCase()
+    return (
+      reg.parent_names.toLowerCase().includes(query) ||
+      reg.email.toLowerCase().includes(query) ||
+      reg.grade_level.toLowerCase().includes(query) ||
+      (reg.babysitting_notes && reg.babysitting_notes.toLowerCase().includes(query))
+    )
+  })
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -130,35 +143,61 @@ export function AdminDashboard() {
 
         {/* All Registrations */}
         <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 mb-8 card-border">
-          <h2 className="text-2xl font-bold text-gold mb-4">All Registrations</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-gold">
-                  <th className="text-gold font-semibold py-2 px-2">Parent Names</th>
-                  <th className="text-gold font-semibold py-2 px-2">Email</th>
-                  <th className="text-gold font-semibold py-2 px-2">Grade Level</th>
-                  <th className="text-gold font-semibold py-2 px-2">Needs Babysitting</th>
-                  <th className="text-gold font-semibold py-2 px-2">Babysitting Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {registrations.map((reg) => (
-                  <tr key={reg.id} className="border-b border-gold border-opacity-30">
-                    <td className="text-gold py-2 px-2">{reg.parent_names}</td>
-                    <td className="text-gold py-2 px-2">{reg.email}</td>
-                    <td className="text-gold py-2 px-2">{reg.grade_level}</td>
-                    <td className="text-gold py-2 px-2">
-                      {reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A'}
-                    </td>
-                    <td className="text-gold py-2 px-2">
-                      {reg.needs_babysitting === true && reg.babysitting_notes ? reg.babysitting_notes : '-'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
+            <h2 className="text-2xl font-bold text-gold">All Registrations</h2>
+            <div className="w-full md:w-auto">
+              <input
+                type="text"
+                placeholder="Search by name, email, grade, or notes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full md:w-80 px-4 py-2 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville"
+              />
+            </div>
           </div>
+          <div className="overflow-x-auto">
+            <div className="max-h-96 overflow-y-auto">
+              <table className="w-full text-left">
+                <thead className="sticky top-0 bg-dark-brown z-10">
+                  <tr className="border-b border-gold">
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Parent Names</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Email</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Grade Level</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Needs Babysitting</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Babysitting Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredRegistrations.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="text-gold text-center py-8 opacity-70">
+                        {searchQuery ? 'No registrations match your search.' : 'No registrations found.'}
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredRegistrations.map((reg) => (
+                      <tr key={reg.id} className="border-b border-gold border-opacity-30">
+                        <td className="text-gold py-2 px-2">{reg.parent_names}</td>
+                        <td className="text-gold py-2 px-2">{reg.email}</td>
+                        <td className="text-gold py-2 px-2">{reg.grade_level}</td>
+                        <td className="text-gold py-2 px-2">
+                          {reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A'}
+                        </td>
+                        <td className="text-gold py-2 px-2">
+                          {reg.needs_babysitting === true && reg.babysitting_notes ? reg.babysitting_notes : '-'}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          {searchQuery && (
+            <div className="mt-4 text-sm text-gold opacity-70">
+              Showing {filteredRegistrations.length} of {totalRegistrations} registrations
+            </div>
+          )}
         </div>
 
         {/* Recent Registrations Feed */}
