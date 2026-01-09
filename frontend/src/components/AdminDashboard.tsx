@@ -8,6 +8,7 @@ export function AdminDashboard() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
+  const [babysittingOnly, setBabysittingOnly] = useState(false)
 
   useEffect(() => {
     fetchRegistrations()
@@ -96,8 +97,14 @@ export function AdminDashboard() {
 
   const totalRegistrations = registrations.length
 
-  // Filter registrations based on search query
+  // Filter registrations based on search query and babysitting filter
   const filteredRegistrations = registrations.filter((reg) => {
+    // Filter by babysitting needs first
+    if (babysittingOnly && reg.needs_babysitting !== true) {
+      return false
+    }
+
+    // Then filter by search query
     if (!searchQuery.trim()) return true
     const query = searchQuery.toLowerCase()
     return (
@@ -145,14 +152,23 @@ export function AdminDashboard() {
         <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 mb-8 card-border">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
             <h2 className="text-2xl font-bold text-gold">All Registrations</h2>
-            <div className="w-full md:w-auto">
+            <div className="flex items-center gap-3 w-full md:w-auto">
               <input
                 type="text"
-                placeholder="Search by name, email, grade, or notes..."
+                placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full md:w-80 px-4 py-2 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville"
+                className="flex-1 md:w-80 px-4 py-2 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville"
               />
+              <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  checked={babysittingOnly}
+                  onChange={(e) => setBabysittingOnly(e.target.checked)}
+                  className="w-5 h-5 text-gold focus:ring-gold accent-gold cursor-pointer"
+                />
+                <span className="text-gold font-semibold">Babysitting Only</span>
+              </label>
             </div>
           </div>
           <div className="overflow-x-auto">
