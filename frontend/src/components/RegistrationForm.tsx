@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { First10Badge } from './First10Badge'
 
 const GRADES = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
 
@@ -15,6 +15,7 @@ interface FormData {
 }
 
 export function RegistrationForm() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState<FormData>({
     parent_names: '',
     email: '',
@@ -26,7 +27,18 @@ export function RegistrationForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
-  const [isFirst10, setIsFirst10] = useState(false)
+
+  const handleCloseTab = () => {
+    window.close()
+    // If window.close() doesn't work (browser blocks it), redirect after 500ms
+    setTimeout(() => {
+      if (navigate) {
+        navigate('/')
+      } else {
+        window.location.assign('/')
+      }
+    }, 500)
+  }
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -126,7 +138,6 @@ export function RegistrationForm() {
 
       if (error) throw error
 
-      setIsFirst10(willBeFirst10)
       setSubmitSuccess(true)
 
       // Trigger email confirmation via Edge Function
@@ -163,11 +174,13 @@ export function RegistrationForm() {
     return (
       <div className="text-center">
         <h2 className="font-playfair text-3xl font-bold text-gold mb-4">Registration Successful!</h2>
-        {isFirst10 && (
-          <div className="mb-4">
-            <First10Badge />
-          </div>
-        )}
+        <button
+          onClick={handleCloseTab}
+          className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)]"
+          style={{ height: '56px' }}
+        >
+          Close Tab
+        </button>
       </div>
     )
   }
