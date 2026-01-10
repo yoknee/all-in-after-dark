@@ -16,15 +16,53 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Off Duty Parents: All In After Dark" />
     <meta property="og:description" content="Speakeasy Havdalah at The Hidden Door - Saturday, January 24th, 2026. Dress to impress." />
-    <meta property="og:image" content="/og-image.svg" />
-    <meta property="og:url" content="https://raw.githubusercontent.com/yoknee/all-in-after-dark/refs/heads/main/frontend/public/og-image.png" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:secure_url" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Off Duty Parents: All In After Dark - Speakeasy Havdalah Event" />
+    <meta property="og:url" content="/" />
     <meta property="og:site_name" content="Off Duty Parents" />
+    <meta property="og:locale" content="en_US" />
     
-    <!-- Twitter -->
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Off Duty Parents: All In After Dark" />
     <meta name="twitter:description" content="Speakeasy Havdalah at The Hidden Door - Saturday, January 24th, 2026. Dress to impress." />
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/yoknee/all-in-after-dark/refs/heads/main/frontend/public/og-image.png" />
+    <meta name="twitter:image" content="/og-image.png" />
+    <meta name="twitter:image:alt" content="Off Duty Parents: All In After Dark - Speakeasy Havdalah Event" />
+    
+    <!-- Convert relative URLs to absolute for social media crawlers -->
+    <script>
+      (function() {
+        // Set absolute URLs immediately for better social media compatibility
+        // This ensures crawlers get absolute URLs even if they read the HTML before JS execution
+        try {
+          const baseUrl = window.location.origin;
+          const ogImage = document.querySelector('meta[property="og:image"]');
+          const ogImageSecure = document.querySelector('meta[property="og:image:secure_url"]');
+          const ogUrl = document.querySelector('meta[property="og:url"]');
+          const twitterImage = document.querySelector('meta[name="twitter:image"]');
+          
+          if (ogImage && ogImage.content.startsWith('/')) {
+            const absoluteUrl = baseUrl + ogImage.content;
+            ogImage.setAttribute('content', absoluteUrl);
+          }
+          if (ogImageSecure && ogImageSecure.content.startsWith('/')) {
+            ogImageSecure.setAttribute('content', baseUrl + ogImageSecure.content);
+          }
+          if (ogUrl && (ogUrl.content === '/' || ogUrl.content.startsWith('/'))) {
+            ogUrl.setAttribute('content', baseUrl + (ogUrl.content === '/' ? '' : ogUrl.content));
+          }
+          if (twitterImage && twitterImage.content.startsWith('/')) {
+            twitterImage.setAttribute('content', baseUrl + twitterImage.content);
+          }
+        } catch (e) {
+          // Silently fail if window is not available (SSR)
+        }
+      })();
+    </script>
     
     <!-- Additional Meta -->
     <meta name="description" content="Speakeasy Havdalah at The Hidden Door - Saturday, January 24th, 2026. Dress to impress." />
