@@ -210,7 +210,11 @@ export function AdminDashboard() {
                     filteredRegistrations.map((reg) => (
                       <tr key={reg.id} className="border-b border-gold border-opacity-30">
                         <td className="text-gold py-2 px-2">
-                          {reg.is_first_10 ? <First10Badge /> : '-'}
+                          {reg.is_first_10 ? (
+                            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold/20 border border-gold text-gold text-xs">
+                              ✕
+                            </span>
+                          ) : '-'}
                         </td>
                         <td className="text-gold py-2 px-2">{reg.parent_names}</td>
                         <td className="text-gold py-2 px-2" style={{ maxWidth: '290px', wordWrap: 'break-word' }}>{reg.email}</td>
