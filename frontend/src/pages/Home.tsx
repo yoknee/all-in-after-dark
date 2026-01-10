@@ -23,19 +23,23 @@ export function Home() {
           
           <ArtDecoTop />
           
-          <div className="text-[12px] text-light-gold text-center tracking-widest uppercase my-5 font-normal">
+          <div className="text-[13px] text-light-gold text-center tracking-widest uppercase my-5 font-normal">
             The Night Shift Collective Presents
           </div>
           
-          <h1 className="font-playfair text-[44px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
-            OFF DUTY PARENTS:<br />ALL IN AFTER DARK
+          <h1 className="font-playfair text-[48px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
+            ALL IN AFTER DARK
           </h1>
           
-          <div className="font-playfair text-2xl text-light-gold text-center italic my-4 tracking-wide">
-            Speakeasy Havdalah at The Hidden Door
+          <div className="font-playfair text-[28px] text-light-gold text-center italic tracking-wide leading-[1.25]">
+            A Speakeasy Havdalah
+          </div>
+
+          <div className="font-playfair text-[36px] text-light-gold text-center italic tracking-wide leading-[1.25]">
+            <span className="font-playfair text-[24px] text-light-gold text-center italic tracking-wide leading-[1.25]">at</span> Senesh's Hidden Door
           </div>
           
-          <CTAButton onClick={() => navigate('/register')} className="mt-5 mb-2">
+          <CTAButton onClick={() => navigate('/register')} className="mt-8 mb-4">
             Reserve Your Spot
           </CTAButton>
           
@@ -129,7 +133,7 @@ export function Home() {
           
           <div className="mt-15 w-full flex flex-col justify-center items-center gap-2" style={{ boxSizing: 'content-box', display: 'flex', flexDirection: 'column' }}>
             <div className="text-xs text-light-gold italic mt-2.5">
-              Questions? Your friendly event insider has the answers.
+            Questions? Find your grade’s contributor via WhatsApp.
             </div>
           </div>
         </div>

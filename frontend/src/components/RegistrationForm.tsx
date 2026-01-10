@@ -377,7 +377,7 @@ export function RegistrationForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-gold"
+          className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-10 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-gold"
           style={{ height: '56px' }}
         >
           {isSubmitting ? 'Submitting...' : 'submit'}
