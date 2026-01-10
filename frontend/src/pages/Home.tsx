@@ -8,7 +8,7 @@ export function Home() {
   return (
     <div className="min-h-screen bg-dark-bg font-baskerville text-cream">
       {/* Hero Section */}
-      <div className="min-h-screen bg-[rgba(13,8,5,1)] flex justify-center items-center pt-4 pb-4 relative overflow-hidden text-[rgba(13,8,5,1)]">
+      <div className="min-h-screen bg-[rgba(13,8,5,1)] flex justify-center items-center relative overflow-hidden text-[rgba(13,8,5,1)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)] pointer-events-none"></div>
         
         <div className="max-w-[600px] w-full border-[3px] border-gold relative p-10 z-10 text-center" style={{ borderStyle: 'solid', borderWidth: '3px', borderColor: 'rgba(212, 175, 55, 0.75)', borderImage: 'none', boxShadow: 'none', background: 'unset', backgroundImage: 'none', backgroundColor: 'unset' }}>
@@ -23,19 +23,19 @@ export function Home() {
           
           <ArtDecoTop />
           
-          <div className="text-[13px] text-light-gold text-center tracking-widest uppercase my-5 font-normal">
+          <div className="text-[12px] text-light-gold text-center tracking-widest uppercase my-5 font-normal">
             The Night Shift Collective Presents
           </div>
           
-          <h1 className="font-playfair text-[48px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
+          <h1 className="font-playfair text-[40px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
             ALL IN AFTER DARK
           </h1>
           
-          <div className="font-playfair text-[28px] text-light-gold text-center italic tracking-wide leading-[1.25]">
+          <div className="font-playfair text-[24px] text-light-gold text-center italic tracking-wide leading-[1.25]">
             A Speakeasy Havdalah
           </div>
 
-          <div className="font-playfair text-[36px] text-light-gold text-center italic tracking-wide leading-[1.25]">
+          <div className="font-playfair text-[28px] text-light-gold text-center italic tracking-wide leading-[1.25]">
             <span className="font-playfair text-[24px] text-light-gold text-center italic tracking-wide leading-[1.25]">at</span> Senesh's Hidden Door
           </div>
           

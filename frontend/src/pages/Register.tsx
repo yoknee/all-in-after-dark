@@ -19,19 +19,19 @@ export function Register() {
           
           <ArtDecoTop />
           
-          <div className="text-[13px] text-light-gold text-center tracking-widest uppercase my-5 font-normal">
+          <div className="text-[12px] text-light-gold text-center tracking-widest uppercase my-5 font-normal">
             The Night Shift Collective Presents
           </div>
           
-          <h1 className="font-playfair text-[48px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
+          <h1 className="font-playfair text-[40px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
             ALL IN AFTER DARK
           </h1>
           
-          <div className="font-playfair text-[28px] text-light-gold text-center italic tracking-wide leading-[1.25]">
+          <div className="font-playfair text-[24px] text-light-gold text-center italic tracking-wide leading-[1.25]">
             A Speakeasy Havdalah
           </div>
 
-          <div className="font-playfair text-[36px] text-light-gold text-center italic tracking-wide leading-[1.25]">
+          <div className="font-playfair text-[28px] text-light-gold text-center italic tracking-wide leading-[1.25]">
             <span className="font-playfair text-[24px] text-light-gold text-center italic tracking-wide leading-[1.25]">at</span> Senesh's Hidden Door
           </div>
           
