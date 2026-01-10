@@ -27,7 +27,7 @@ export function Home() {
             The Night Shift Collective Presents
           </div>
           
-          <h1 className="font-playfair text-[48px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
+          <h1 className="font-playfair text-[44px] font-black text-gold text-center my-5 drop-shadow-[2px_2px_4px_rgba(0,0,0,0.8)] tracking-wide leading-tight w-full">
             ALL IN<br />AFTER DARK
           </h1>
           
