@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Registration } from '../lib/supabase'
-import { First10Badge } from './First10Badge'
 import { PodiumRanking } from './PodiumRanking'
+import { GradeMultiSelect } from './GradeMultiSelect'
 
 export function AdminDashboard() {
   const [registrations, setRegistrations] = useState<Registration[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [babysittingOnly, setBabysittingOnly] = useState(false)
-  const [first10Only, setFirst10Only] = useState(false)
+  const [vipOnly, setVipOnly] = useState(false)
+  const [selectedGrades, setSelectedGrades] = useState<string[]>([])
 
   useEffect(() => {
     fetchRegistrations()
@@ -54,31 +55,36 @@ export function AdminDashboard() {
   const exportToCSV = () => {
     const headers = [
       'ID',
+      'Registration ID',
       'Parent Names',
       'Email',
-      'Grade Level',
+      'Grade Level(s)',
       'Number of Adults',
-      'First 10 Status',
-      'Registration Number',
+      'Vote Count',
+      'VIP Status',
       'Registration Date',
       'Confirmation Sent',
       'Needs Babysitting',
       'Babysitting Notes',
     ]
 
-    const rows = registrations.map((reg) => [
-      reg.id,
-      reg.parent_names,
-      reg.email,
-      reg.grade_level,
-      reg.num_adults.toString(),
-      reg.is_first_10 ? 'Yes' : 'No',
-      reg.registration_number.toString(),
-      new Date(reg.created_at).toLocaleString(),
-      reg.confirmation_sent ? 'Yes' : 'No',
-      reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A',
-      reg.babysitting_notes || '',
-    ])
+    const rows = registrations.map((reg) => {
+      const gradeLevels = reg.grade_levels?.join(', ') || reg.grade_level || 'N/A'
+      return [
+        reg.id,
+        reg.registration_id?.toString() || 'N/A',
+        reg.parent_names,
+        reg.email,
+        gradeLevels,
+        reg.num_adults.toString(),
+        reg.vote_count?.toString() || reg.num_adults.toString(),
+        reg.is_vip ? 'Yes' : 'No',
+        new Date(reg.created_at).toLocaleString(),
+        reg.confirmation_sent ? 'Yes' : 'No',
+        reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A',
+        reg.babysitting_notes || '',
+      ]
+    })
 
     const csvContent = [
       headers.join(','),
@@ -98,10 +104,27 @@ export function AdminDashboard() {
 
   const totalRegistrations = registrations.length
 
-  // Filter registrations based on search query, babysitting filter, and first 10 filter
+  // Helper function to get grade levels for a registration (handles both old and new format)
+  const getGradeLevels = (reg: Registration): string[] => {
+    if (reg.grade_levels && reg.grade_levels.length > 0) {
+      return reg.grade_levels
+    }
+    if (reg.grade_level) {
+      return [reg.grade_level]
+    }
+    return []
+  }
+
+  // Helper function to get display text for grade levels
+  const getGradeLevelsDisplay = (reg: Registration): string => {
+    const grades = getGradeLevels(reg)
+    return grades.join(', ') || 'N/A'
+  }
+
+  // Filter registrations based on search query, babysitting filter, VIP filter, and grade filter
   const filteredRegistrations = registrations.filter((reg) => {
-    // Filter by first 10 status first
-    if (first10Only && !reg.is_first_10) {
+    // Filter by VIP status
+    if (vipOnly && !reg.is_vip) {
       return false
     }
 
@@ -110,13 +133,23 @@ export function AdminDashboard() {
       return false
     }
 
+    // Filter by grade levels
+    if (selectedGrades.length > 0) {
+      const regGrades = getGradeLevels(reg)
+      const hasMatchingGrade = selectedGrades.some((grade) => regGrades.includes(grade))
+      if (!hasMatchingGrade) {
+        return false
+      }
+    }
+
     // Then filter by search query
     if (!searchQuery.trim()) return true
     const query = searchQuery.toLowerCase()
+    const gradeLevelsText = getGradeLevelsDisplay(reg).toLowerCase()
     return (
       reg.parent_names.toLowerCase().includes(query) ||
       reg.email.toLowerCase().includes(query) ||
-      reg.grade_level.toLowerCase().includes(query) ||
+      gradeLevelsText.includes(query) ||
       (reg.babysitting_notes && reg.babysitting_notes.toLowerCase().includes(query))
     )
   })
@@ -158,32 +191,43 @@ export function AdminDashboard() {
         <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 mb-8 card-border">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4">
             <h2 className="text-2xl font-bold text-gold">All Registrations</h2>
-            <div className="flex items-center gap-3 w-full md:w-auto flex-wrap">
-              <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
+            <div className="flex flex-col gap-3 w-full md:flex-row md:items-center md:justify-end">
+              <div className="flex items-center gap-3 flex-wrap">
+                <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={vipOnly}
+                    onChange={(e) => setVipOnly(e.target.checked)}
+                    className="w-5 h-5 text-gold focus:ring-gold accent-gold cursor-pointer"
+                  />
+                  <span className="text-gold font-semibold">VIP Only</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={babysittingOnly}
+                    onChange={(e) => setBabysittingOnly(e.target.checked)}
+                    className="w-5 h-5 text-gold focus:ring-gold accent-gold cursor-pointer"
+                  />
+                  <span className="text-gold font-semibold">Babysitting Only</span>
+                </label>
                 <input
-                  type="checkbox"
-                  checked={first10Only}
-                  onChange={(e) => setFirst10Only(e.target.checked)}
-                  className="w-5 h-5 text-gold focus:ring-gold accent-gold cursor-pointer"
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 md:w-80 px-4 py-2 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville"
                 />
-                <span className="text-gold font-semibold">First 10 Only</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  checked={babysittingOnly}
-                  onChange={(e) => setBabysittingOnly(e.target.checked)}
-                  className="w-5 h-5 text-gold focus:ring-gold accent-gold cursor-pointer"
+              </div>
+              <div className="w-full md:w-auto">
+                <label className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
+                  Filter by Grade(s)
+                </label>
+                <GradeMultiSelect
+                  selectedGrades={selectedGrades}
+                  onChange={setSelectedGrades}
                 />
-                <span className="text-gold font-semibold">Babysitting Only</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 md:w-80 px-4 py-2 bg-dark-brown-2 border-2 border-gold rounded text-cream placeholder-cream placeholder-opacity-50 focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville"
-              />
+              </div>
             </div>
           </div>
           <div className="overflow-x-auto">
@@ -191,10 +235,12 @@ export function AdminDashboard() {
               <table className="w-full text-left">
                 <thead className="sticky top-0 bg-dark-brown z-10">
                   <tr className="border-b border-gold">
-                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">First 10</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Registration ID</th>
                     <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Parent Names</th>
                     <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Email</th>
-                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Grade Level</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Grade Level(s)</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Vote Count</th>
+                    <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">VIP</th>
                     <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Needs Babysitting</th>
                     <th className="text-gold font-semibold py-2 px-2 bg-dark-brown">Babysitting Notes</th>
                   </tr>
@@ -202,23 +248,29 @@ export function AdminDashboard() {
                 <tbody>
                   {filteredRegistrations.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="text-gold text-center py-8 opacity-70">
-                        {searchQuery ? 'No registrations match your search.' : 'No registrations found.'}
+                      <td colSpan={8} className="text-gold text-center py-8 opacity-70">
+                        {searchQuery || selectedGrades.length > 0 || vipOnly || babysittingOnly
+                          ? 'No registrations match your filters.'
+                          : 'No registrations found.'}
                       </td>
                     </tr>
                   ) : (
                     filteredRegistrations.map((reg) => (
                       <tr key={reg.id} className="border-b border-gold border-opacity-30">
                         <td className="text-gold py-2 px-2">
-                          {reg.is_first_10 ? (
+                          {reg.registration_id || '-'}
+                        </td>
+                        <td className="text-gold py-2 px-2">{reg.parent_names}</td>
+                        <td className="text-gold py-2 px-2" style={{ maxWidth: '290px', wordWrap: 'break-word' }}>{reg.email}</td>
+                        <td className="text-gold py-2 px-2">{getGradeLevelsDisplay(reg)}</td>
+                        <td className="text-gold py-2 px-2">{reg.vote_count || reg.num_adults}</td>
+                        <td className="text-gold py-2 px-2">
+                          {reg.is_vip ? (
                             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gold/20 border border-gold text-gold text-xs">
                               ✕
                             </span>
                           ) : '-'}
                         </td>
-                        <td className="text-gold py-2 px-2">{reg.parent_names}</td>
-                        <td className="text-gold py-2 px-2" style={{ maxWidth: '290px', wordWrap: 'break-word' }}>{reg.email}</td>
-                        <td className="text-gold py-2 px-2">{reg.grade_level}</td>
                         <td className="text-gold py-2 px-2">
                           {reg.needs_babysitting === true ? 'Yes' : reg.needs_babysitting === false ? 'No' : 'N/A'}
                         </td>
@@ -250,13 +302,18 @@ export function AdminDashboard() {
               >
                 <div>
                   <div className="text-gold font-semibold">
-                    {reg.parent_names} - {reg.grade_level} Grade
+                    {reg.parent_names} - {getGradeLevelsDisplay(reg)}
+                    {reg.registration_id && ` (ID: ${reg.registration_id})`}
                   </div>
                   <div className="text-gold opacity-70 text-sm">
                     {reg.email} • {new Date(reg.created_at).toLocaleString()}
                   </div>
                 </div>
-                {reg.is_first_10 && <First10Badge />}
+                {reg.is_vip && (
+                  <span className="inline-flex items-center px-2 py-1 rounded-full bg-gold/20 border border-gold text-gold text-xs font-semibold">
+                    VIP
+                  </span>
+                )}
               </div>
             ))}
           </div>

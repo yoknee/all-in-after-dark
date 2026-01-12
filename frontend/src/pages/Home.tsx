@@ -35,6 +35,10 @@ export function Home() {
             A Speakeasy Havdalah<br />at Senesh's Hidden Door
           </div>
           
+          <div className="mt-8 mb-4">
+            <VIPTreatmentBox />
+          </div>
+
           <CTAButton onClick={() => navigate('/register')} className="mt-8 mb-4">
             Reserve Your Spot
           </CTAButton>
@@ -61,10 +65,6 @@ export function Home() {
           <div className="text-center my-4 text-cream">
             <div className="text-base block text-cream mb-1">Free babysitting included on-site</div>
             <div className="text-sm text-light-gold italic">Senesh students only</div>
-          </div>
-          
-          <div className="mt-8 mb-4">
-            <VIPTreatmentBox />
           </div>
 
           <div className="text-center my-10 text-cream text-[15px] leading-[2.2]">
@@ -121,6 +121,10 @@ export function Home() {
             </div>
           </div>
           
+          <div className="mt-8 mb-4">
+            <VIPTreatmentBox />
+          </div>
+
           <div className="flex justify-center items-center my-7.5">
             <CTAButton onClick={() => navigate('/register')} className="max-w-[464px]">
               Reserve Your Spot

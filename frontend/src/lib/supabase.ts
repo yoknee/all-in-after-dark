@@ -13,10 +13,21 @@ export interface Registration {
   id: string
   parent_names: string
   email: string
-  grade_level: string
+  // Legacy field - kept for backward compatibility with old registrations
+  grade_level?: string
+  // New field - array of selected grades
+  grade_levels?: string[]
   num_adults: number
-  is_first_10: boolean
-  registration_number: number
+  // Legacy field - kept for backward compatibility
+  is_first_10?: boolean
+  // Legacy field - kept for backward compatibility
+  registration_number?: number
+  // New field - global registration ID
+  registration_id?: number
+  // New field - number of votes (equals num_adults)
+  vote_count?: number
+  // New field - VIP status (true if registration_id <= 50)
+  is_vip?: boolean
   created_at: string
   confirmation_sent: boolean
   needs_babysitting: boolean | null

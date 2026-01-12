@@ -2,8 +2,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-
-const GRADES = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
+import { GradeMultiSelect } from './GradeMultiSelect'
 
 // Speakeasy-themed words for password generation
 const SHORT_WORDS = [
@@ -33,7 +32,7 @@ const generatePassword = (): string => {
 interface FormData {
   parent_names: string
   email: string
-  grade_level: string
+  grade_levels: string[]
   num_adults: number
   needs_babysitting: boolean | null
   babysitting_notes: string
@@ -44,7 +43,7 @@ export function RegistrationForm() {
   const [formData, setFormData] = useState<FormData>({
     parent_names: '',
     email: '',
-    grade_level: '',
+    grade_levels: [],
     num_adults: 1,
     needs_babysitting: null,
     babysitting_notes: '',
@@ -106,8 +105,8 @@ export function RegistrationForm() {
       newErrors.email = 'Please enter a valid email address'
     }
 
-    if (!formData.grade_level) {
-      newErrors.grade_level = 'Please select a grade level'
+    if (formData.grade_levels.length === 0) {
+      newErrors.grade_levels = 'Please select at least one grade level'
     }
 
     if (formData.needs_babysitting === null) {
@@ -133,30 +132,17 @@ export function RegistrationForm() {
     setSubmitSuccess(false)
 
     try {
-      // Check current count for selected grade
-      const { data: existingRegistrations, error: countError } = await supabase
-        .from('registrations')
-        .select('id')
-        .eq('grade_level', formData.grade_level)
-
-      if (countError) throw countError
-
-      const currentCount = existingRegistrations?.length || 0
-      const willBeFirst10 = currentCount < 10
-      const registrationNumber = currentCount + 1
-
-      // Insert registration
+      // Insert registration with new schema
       const { data, error } = await supabase
         .from('registrations')
         .insert({
           parent_names: formData.parent_names.trim(),
           email: formData.email.trim().toLowerCase(),
-          grade_level: formData.grade_level,
+          grade_levels: formData.grade_levels,
           num_adults: formData.num_adults,
+          vote_count: formData.num_adults, // Will also be set by trigger, but include for clarity
           needs_babysitting: formData.needs_babysitting,
           babysitting_notes: formData.needs_babysitting ? formData.babysitting_notes.trim() : null,
-          is_first_10: willBeFirst10,
-          registration_number: registrationNumber,
           confirmation_sent: false,
         })
         .select()
@@ -185,7 +171,7 @@ export function RegistrationForm() {
       setFormData({
         parent_names: '',
         email: '',
-        grade_level: '',
+        grade_levels: [],
         num_adults: 1,
         needs_babysitting: null,
         babysitting_notes: '',
@@ -269,26 +255,19 @@ export function RegistrationForm() {
         </div>
 
         <div>
-          <label htmlFor="grade_level" className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
-            Grade Level *
+          <label htmlFor="grade_levels" className="block text-gold font-semibold mb-2 text-sm tracking-wider uppercase">
+            Grade Level(s) *
           </label>
-          <select
-            id="grade_level"
-            name="grade_level"
-            value={formData.grade_level}
-            onChange={handleChange}
-            className={`w-full px-4 py-3 bg-dark-brown-2 border-2 border-gold rounded text-cream focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)] font-baskerville ${errors.grade_level ? 'border-red-500' : ''}`}
-          >
-            <option value="" className="bg-dark-brown-2 text-cream">Select a grade</option>
-            {GRADES.map((grade) => (
-              <option key={grade} value={grade} className="bg-dark-brown-2 text-cream">
-                {grade === 'K' ? 'Kindergarten' : `${grade} Grade`}
-              </option>
-            ))}
-          </select>
-          {errors.grade_level && (
-            <p className="text-red-400 text-sm mt-1">{errors.grade_level}</p>
-          )}
+          <GradeMultiSelect
+            selectedGrades={formData.grade_levels}
+            onChange={(grades) => {
+              setFormData((prev) => ({ ...prev, grade_levels: grades }))
+              if (errors.grade_levels) {
+                setErrors((prev) => ({ ...prev, grade_levels: undefined }))
+              }
+            }}
+            error={errors.grade_levels}
+          />
         </div>
 
         <div>
@@ -377,7 +356,7 @@ export function RegistrationForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-10 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-gold"
+          className="w-full flex flex-row flex-wrap justify-center items-center bg-gold text-dark-brown-2 px-4 py-4.5 text-base tracking-widest uppercase font-bold border-none cursor-pointer mt-6 transition-all duration-300 shadow-[0_6px_20px_rgba(212,175,55,0.4)] font-baskerville hover:bg-light-gold hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-gold"
           style={{ height: '56px' }}
         >
           {isSubmitting ? 'Submitting...' : 'submit'}

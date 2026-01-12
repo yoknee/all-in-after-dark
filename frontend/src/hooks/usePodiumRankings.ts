@@ -49,24 +49,41 @@ export function usePodiumRankings() {
     try {
       const { data, error } = await supabase
         .from('registrations')
-        .select('grade_level')
+        .select('grade_level, grade_levels, vote_count, num_adults')
 
       if (error) throw error
 
       const grades = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
       const gradeDataList: GradeData[] = []
 
-      // Count signups per grade
+      // Calculate total votes per grade (using vote_count, fallback to num_adults)
       grades.forEach((grade) => {
-        const count = data?.filter((r) => r.grade_level === grade).length || 0
+        let totalVotes = 0
+        
+        data?.forEach((r) => {
+          // Check if this registration includes this grade
+          let includesGrade = false
+          if (r.grade_levels && Array.isArray(r.grade_levels)) {
+            includesGrade = r.grade_levels.includes(grade)
+          } else if (r.grade_level === grade) {
+            includesGrade = true
+          }
+          
+          if (includesGrade) {
+            // Use vote_count if available, otherwise use num_adults
+            const votes = r.vote_count || r.num_adults || 1
+            totalVotes += votes
+          }
+        })
+        
         gradeDataList.push({
           gradeId: grade,
           gradeLabel: grade === 'K' ? 'Kindergarten' : `${grade} Grade`,
-          signupCount: count,
+          signupCount: totalVotes, // Now represents total votes, not just count
         })
       })
 
-      // Sort by signup count (descending), then by grade name A-Z for ties
+      // Sort by vote count (descending), then by grade name A-Z for ties
       gradeDataList.sort((a, b) => {
         if (b.signupCount !== a.signupCount) {
           return b.signupCount - a.signupCount

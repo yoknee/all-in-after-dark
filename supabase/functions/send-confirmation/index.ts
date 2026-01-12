@@ -44,6 +44,22 @@ serve(async (req) => {
     // Get event password from environment variable
     const eventPassword = Deno.env.get('EVENT_PASSWORD') || 'CASINO2024'
 
+    // Helper function to get grade levels display
+    const getGradeLevelsDisplay = () => {
+      if (registration.grade_levels && Array.isArray(registration.grade_levels) && registration.grade_levels.length > 0) {
+        return registration.grade_levels.join(', ')
+      }
+      if (registration.grade_level) {
+        return registration.grade_level
+      }
+      return 'N/A'
+    }
+
+    const gradeLevelsDisplay = getGradeLevelsDisplay()
+    const registrationId = registration.registration_id || 'N/A'
+    const voteCount = registration.vote_count || registration.num_adults || 1
+    const isVip = registration.is_vip || false
+
     // Prepare email content
     const eventDetails = `
 CASINO NIGHT EVENT
@@ -54,14 +70,15 @@ Location: [Event Location]
 
 Entry Password: ${eventPassword}
 
-${registration.is_first_10 ? '🎉 CONGRATULATIONS! You are among the first 10 registrations for your grade and will receive special perks!' : ''}
+${isVip ? '🎉 CONGRATULATIONS! You are among the first 50 registrations and will receive VIP treatment!' : ''}
 
 Registration Details:
 - Parent Name(s): ${registration.parent_names}
-- Grade Level: ${registration.grade_level}
+- Grade Level(s): ${gradeLevelsDisplay}
 - Number of Adults: ${registration.num_adults}
+- Vote Count: ${voteCount}
 
-Registration Number: #${registration.registration_number} for ${registration.grade_level} Grade
+Registration ID: #${registrationId}
 
 We look forward to seeing you at the event!
 

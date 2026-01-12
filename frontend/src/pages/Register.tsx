@@ -4,7 +4,7 @@ import { ArtDecoTop, CornerOrnament } from '../components/ArtDecoElements'
 export function Register() {
   return (
     <div className="min-h-screen bg-dark-bg font-baskerville text-cream">
-      <div className="min-h-screen bg-[rgba(13,8,5,1)] flex justify-center items-center py-4 px-0 relative overflow-hidden text-[rgba(13,8,5,1)]">
+      <div className="min-h-screen bg-[rgba(13,8,5,1)] flex justify-center items-center py-0 px-0 relative overflow-hidden text-[rgba(13,8,5,1)]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,175,55,0.1)_0%,transparent_70%)] pointer-events-none"></div>
         
         <div className="max-w-[600px] w-full bg-[rgba(13,8,5,1)] border-[3px] border-gold relative p-10 z-10" style={{ boxShadow: 'none', backgroundImage: 'none' }}>
