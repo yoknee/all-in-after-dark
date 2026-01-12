@@ -11,17 +11,6 @@ export function PodiumRanking() {
     )
   }
 
-  // Check if we have any rankings
-  const hasRankings = podiumRankings.some((p) => p.grade !== null)
-
-  if (!hasRankings) {
-    return (
-      <div className="text-gold opacity-70 text-center py-8">
-        No registrations yet. Be the first!
-      </div>
-    )
-  }
-
   // Reorder for podium display: 2nd (left), 1st (center), 3rd (right)
   const secondPlace = podiumRankings.find((p) => p.position === 2)
   const firstPlace = podiumRankings.find((p) => p.position === 1)
@@ -64,7 +53,7 @@ export function PodiumRanking() {
               {ranking.grade.signupCount}
             </div>
             <div className="text-xs text-light-gold mt-1">
-              {ranking.grade.signupCount === 1 ? 'signup' : 'signups'}
+              {ranking.grade.signupCount === 1 ? 'registration' : 'registrations'}
             </div>
           </div>
         </div>
