@@ -44,16 +44,16 @@ export function PodiumRanking() {
             {position === 1 ? '1st' : position === 2 ? '2nd' : '3rd'}
           </div>
           
-          {/* Grade name */}
-          <div className="text-center px-2">
-            <div className="text-lg md:text-xl font-bold text-gold font-playfair mb-1">
+          {/* Grade name and count */}
+          <div className="text-center px-2 z-10">
+            <div className="text-lg md:text-xl font-bold text-gold font-playfair mb-2">
               {ranking.grade.gradeLabel}
             </div>
-            <div className="text-2xl md:text-3xl font-black text-gold font-playfair">
+            <div className="text-3xl md:text-4xl font-black text-gold font-playfair mb-1">
               {ranking.grade.signupCount}
             </div>
-            <div className="text-xs text-light-gold mt-1">
-              {ranking.grade.signupCount === 1 ? 'registration' : 'registrations'}
+            <div className="text-xs text-light-gold">
+              {ranking.grade.signupCount === 1 ? 'selection' : 'selections'}
             </div>
           </div>
         </div>
