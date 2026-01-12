@@ -134,19 +134,20 @@ export function RegistrationForm() {
     try {
       // Insert registration with new schema
       const { data, error } = await supabase
-        .from('registrations')
-        .insert({
-          parent_names: formData.parent_names.trim(),
-          email: formData.email.trim().toLowerCase(),
-          grade_levels: formData.grade_levels,
-          num_adults: formData.num_adults,
-          vote_count: formData.num_adults, // Will also be set by trigger, but include for clarity
-          needs_babysitting: formData.needs_babysitting,
-          babysitting_notes: formData.needs_babysitting ? formData.babysitting_notes.trim() : null,
-          confirmation_sent: false,
-        })
-        .select()
-        .single()
+  .from('registrations')
+  .insert({
+    parent_names: formData.parent_names.trim(),
+    email: formData.email.trim().toLowerCase(),
+    grade_levels: formData.grade_levels,
+    num_adults: formData.num_adults,
+    needs_babysitting: formData.needs_babysitting,
+    babysitting_notes: formData.needs_babysitting
+      ? formData.babysitting_notes.trim()
+      : null,
+    confirmation_sent: false
+  })
+  .select()
+  .single();
 
       if (error) throw error
 
