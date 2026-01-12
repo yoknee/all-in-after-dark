@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 export type PodiumRanking = {
   position: 1 | 2 | 3
   grade: {
+    gradeId: string
     gradeLabel: string
     signupCount: number
   } | null
