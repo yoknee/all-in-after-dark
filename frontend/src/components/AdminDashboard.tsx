@@ -103,6 +103,7 @@ export function AdminDashboard() {
   }
 
   const totalRegistrations = registrations.length
+  const totalHeadcount = registrations.reduce((sum, reg) => sum + (reg.num_adults || 0), 0)
 
   // Helper function to get grade levels for a registration (handles both old and new format)
   const getGradeLevels = (reg: Registration): string[] => {
@@ -170,10 +171,14 @@ export function AdminDashboard() {
         </h1>
 
         {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 text-center card-border hover:shadow-xl transition-all duration-300">
             <div className="text-3xl font-bold text-gold">{totalRegistrations}</div>
             <div className="text-gold mt-2">Total Registrations</div>
+          </div>
+          <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 text-center card-border hover:shadow-xl transition-all duration-300">
+            <div className="text-3xl font-bold text-gold">{totalHeadcount}</div>
+            <div className="text-gold mt-2">Total Headcount</div>
           </div>
           <div className="bg-dark-brown border-2 border-gold rounded-lg p-6 text-center card-border">
             <button onClick={exportToCSV} className="btn-primary w-full">
