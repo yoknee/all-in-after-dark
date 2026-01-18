@@ -40,7 +40,7 @@ export function useFastestTo10() {
     try {
       const { data, error } = await supabase
         .from('registrations')
-        .select('grade_level, created_at')
+        .select('grade_levels, created_at')
         .order('created_at', { ascending: true })
 
       if (error) throw error
@@ -50,7 +50,9 @@ export function useFastestTo10() {
 
       // For each grade, find when it reached 10 signups
       grades.forEach((grade) => {
-        const gradeRegistrations = data?.filter((r) => r.grade_level === grade) || []
+        const gradeRegistrations = data?.filter((r) => 
+          r.grade_levels && Array.isArray(r.grade_levels) && r.grade_levels.includes(grade)
+        ) || []
         
         if (gradeRegistrations.length >= 10) {
           // The 10th registration is at index 9 (0-indexed)

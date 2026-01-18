@@ -40,20 +40,15 @@ export function useGradeCounts() {
     try {
       const { data, error } = await supabase
         .from('registrations')
-        .select('grade_level, grade_levels')
+        .select('grade_levels')
 
       if (error) throw error
 
       const grades = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
       const counts: GradeCount[] = grades.map((grade) => {
-        // Count registrations that have this grade in either grade_level (old) or grade_levels (new)
+        // Count registrations that have this grade in grade_levels
         const count = data?.filter((r) => {
-          // New format: check if grade_levels array contains this grade
-          if (r.grade_levels && Array.isArray(r.grade_levels)) {
-            return r.grade_levels.includes(grade)
-          }
-          // Old format: check if grade_level matches
-          return r.grade_level === grade
+          return r.grade_levels && Array.isArray(r.grade_levels) && r.grade_levels.includes(grade)
         }).length || 0
         return {
           grade,
