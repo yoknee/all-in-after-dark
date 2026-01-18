@@ -47,9 +47,15 @@ export function usePodiumRankings() {
     try {
       const { data, error } = await supabase
         .from('registrations')
-        .select('grade_level, grade_levels')
+        .select('grade_levels')
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase query error:', error)
+        throw error
+      }
+
+      console.log('Fetched registrations:', data?.length || 0, 'records')
+      console.log('Sample registration:', data?.[0])
 
       const grades = ['K', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th']
       const gradeDataList: Array<{ gradeId: string; gradeLabel: string; signupCount: number }> = []
@@ -60,14 +66,7 @@ export function usePodiumRankings() {
         
         data?.forEach((r) => {
           // Check if this registration includes this grade
-          let includesGrade = false
-          if (r.grade_levels && Array.isArray(r.grade_levels)) {
-            includesGrade = r.grade_levels.includes(grade)
-          } else if (r.grade_level === grade) {
-            includesGrade = true
-          }
-          
-          if (includesGrade) {
+          if (r.grade_levels && Array.isArray(r.grade_levels) && r.grade_levels.includes(grade)) {
             registrationCount += 1
           }
         })
@@ -78,6 +77,8 @@ export function usePodiumRankings() {
           signupCount: registrationCount,
         })
       })
+
+      console.log('Grade counts:', gradeDataList)
 
       // Sort by registration count (descending), then by grade name A-Z for ties
       gradeDataList.sort((a, b) => {
@@ -91,6 +92,8 @@ export function usePodiumRankings() {
       // Take top 3 (always return 3 positions, even if some have 0 counts)
       const top3 = gradeDataList.slice(0, 3)
 
+      console.log('Top 3 grades:', top3)
+
       // Build podium rankings in order: 1st, 2nd, 3rd
       // Always show top 3 grades, even if they have 0 counts
       const newPodiumRankings: PodiumRanking[] = [
@@ -98,6 +101,8 @@ export function usePodiumRankings() {
         { position: 2, grade: top3[1] || null },
         { position: 3, grade: top3[2] || null },
       ]
+
+      console.log('Final podium rankings:', newPodiumRankings)
 
       setPodiumRankings(newPodiumRankings)
       setLoading(false)
