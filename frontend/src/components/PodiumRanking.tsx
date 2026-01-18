@@ -26,7 +26,11 @@ export function PodiumRanking() {
   const PodiumStand = ({ ranking, position }: { ranking: PodiumRankingType | undefined; position: 1 | 2 | 3 }) => {
     if (!ranking || !ranking.grade) {
       return (
-        <div className="flex-1 flex flex-col items-center justify-end">
+        <div className="flex-1 flex flex-col items-center">
+          {/* Position badge above empty podium */}
+          <div className="bg-gold text-dark-brown-2 px-2 py-1 text-xs font-bold rounded shadow-lg mb-2">
+            {position === 1 ? '1st' : position === 2 ? '2nd' : '3rd'}
+          </div>
           <div className={`w-full ${podiumHeights[position]} bg-[rgba(212,175,55,0.1)] border-2 border-gold border-opacity-30 rounded-t-lg flex flex-col items-center justify-center`}>
             <div className="text-gold opacity-30 text-sm font-semibold">
               {position === 1 ? '1st' : position === 2 ? '2nd' : '3rd'}
@@ -37,18 +41,14 @@ export function PodiumRanking() {
     }
 
     return (
-      <div className="flex-1 flex flex-col items-center justify-end">
+      <div className="flex-1 flex flex-col items-center">
+        {/* Position badge above podium */}
+        <div className="bg-gold text-dark-brown-2 px-2 py-1 text-xs font-bold rounded shadow-lg mb-2">
+          {position === 1 ? '1st' : position === 2 ? '2nd' : '3rd'}
+        </div>
         <div className={`w-full ${podiumHeights[position]} bg-gradient-to-br from-[rgba(212,175,55,0.2)] to-[rgba(212,175,55,0.05)] border-2 border-gold rounded-t-lg flex flex-col items-center justify-center relative overflow-hidden`}>
-          {/* Position badge */}
-          <div className="absolute top-2 left-2 bg-gold text-dark-brown-2 px-2 py-1 text-xs font-bold rounded shadow-lg">
-            {position === 1 ? '1st' : position === 2 ? '2nd' : '3rd'}
-          </div>
-          
-          {/* Place, grade name, and count */}
+          {/* Grade name and count */}
           <div className="text-center px-2 z-10">
-            <div className="text-xs uppercase tracking-widest text-light-gold mb-1">
-              {position === 1 ? '1st Place' : position === 2 ? '2nd Place' : '3rd Place'}
-            </div>
             <div className="text-lg md:text-xl font-bold text-gold font-playfair mb-2">
               {ranking.grade.gradeLabel}
             </div>
