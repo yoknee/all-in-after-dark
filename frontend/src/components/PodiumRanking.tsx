@@ -44,8 +44,11 @@ export function PodiumRanking() {
             {position === 1 ? '1st' : position === 2 ? '2nd' : '3rd'}
           </div>
           
-          {/* Grade name and count */}
+          {/* Place, grade name, and count */}
           <div className="text-center px-2 z-10">
+            <div className="text-xs uppercase tracking-widest text-light-gold mb-1">
+              {position === 1 ? '1st Place' : position === 2 ? '2nd Place' : '3rd Place'}
+            </div>
             <div className="text-lg md:text-xl font-bold text-gold font-playfair mb-2">
               {ranking.grade.gradeLabel}
             </div>
@@ -65,7 +68,7 @@ export function PodiumRanking() {
     <div className="w-full py-8">
       <div className="text-center mb-6">
         <h2 className="text-xl md:text-2xl font-bold text-gold tracking-wider font-playfair">
-          Most RSVPs by Grade
+          Most Selections by Grade
         </h2>
       </div>
 
