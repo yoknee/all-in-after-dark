@@ -5,7 +5,7 @@ export function VIPTreatmentBox() {
         Special VIP Treatment
       </div>
       <div className="text-cream text-sm leading-relaxed">
-        First 50 to sign up gets VIP treatment.<br />
+        First 18 to sign up gets VIP treatment.<br />
         Don't miss out!
       </div>
     </div>
